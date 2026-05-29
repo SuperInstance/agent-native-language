@@ -1,32 +1,14 @@
-# Agent Native Language
+# agent-native-language
 
-**Agents don't exchange JSON or text. They exchange spectral structure.**
+A communication protocol where agents exchange spectral structure instead of text or JSON. The Laplacian IS the message. The conservation ratio IS the confidence. The Fiedler vector IS the routing.
 
-The input and output ARE the tension graph.
+## What This Gives You
 
-## The Idea
-
-Current agent communication:
-```
-Agent A → "Please analyze this data" → Agent B → {"result": 0.95} → Agent A
-```
-
-Agent-native communication:
-```
-Agent A → [Laplacian L_A + task vector t] → Agent B → [Laplacian L_B + result vector r] → Agent A
-```
-
-The Laplacian IS the message. The conservation ratio IS the confidence. The Fiedler vector IS the routing.
-
-## Core Concepts
-
-| Concept | What it means in agent comms |
-|---|---|
-| **Laplacian** | The agent's capability graph — its full state as a spectral object |
-| **Eigenvalues** | Spectral fingerprint — identifies the agent's "shape" |
-| **Conservation ratio** | Confidence in the message — how well-structured the agent's state is |
-| **Fiedler vector** | Routing — which agents should receive and process this message |
-| **Spectral alignment** | Compatibility — cosine similarity of eigenvalue spectra determines if an agent can handle a task |
+- **SpectralMessage**: a message IS a Laplacian — encode agent state as a spectral object
+- **Spectral communication bus**: agents register with capability graphs, send tasks as spectral projections, receive results as Laplacians
+- **Conservation-based confidence**: the conservation ratio of the Laplacian tells you how well-structured the agent's response is
+- **Fiedler-based routing**: tasks are routed to agents based on eigenvector alignment, not string matching
+- **No serialization overhead**: pure NumPy linear algebra replaces JSON/text parsing
 
 ## Quick Start
 
@@ -34,6 +16,8 @@ The Laplacian IS the message. The conservation ratio IS the confidence. The Fied
 pip install numpy
 python demo.py
 ```
+
+This runs 4 agents communicating through spectral messages — registering capabilities, sending tasks, receiving results, all without a single JSON object.
 
 ## Architecture
 
@@ -43,12 +27,42 @@ comm_bus.py           — AgentNativeComm: the spectral communication bus
 demo.py               — 4 agents communicating purely through spectral messages
 ```
 
-## No JSON. No Text. Pure Mathematics.
+### Core Concepts
 
-Agents register with capability graphs. Tasks are projected onto eigenvectors. Routing uses the Fiedler vector. Confidence is a conservation ratio. Composition is block-diagonal Laplacian assembly.
+| Concept | What it replaces |
+|---------|-----------------|
+| Laplacian | JSON payload — encodes full capability structure |
+| Eigenvalues | Type/schema — spectral fingerprint identifies the agent |
+| Conservation ratio | Status code — confidence in the message |
+| Fiedler vector | Routing table — which agents should handle this |
+| Spectral alignment | Content negotiation — cosine similarity of spectra |
 
-## License
+### The Protocol
 
-MIT
+```
+# Traditional:
+Agent A → "Please analyze this data" → Agent B → {"result": 0.95} → Agent A
 
-Part of the [SuperInstance OpenConstruct](https://github.com/SuperInstance/OpenConstruct) ecosystem.
+# Agent-native:
+Agent A → [Laplacian L_A + task vector t] → Agent B → [Laplacian L_B + result vector r] → Agent A
+```
+
+## How It Fits
+
+Part of the [SuperInstance OpenConstruct](https://github.com/SuperInstance/OpenConstruct) ecosystem. This is the communication layer for:
+
+- **agent-spectrum-os** — the OS that schedules agents spectrally
+- **agent-manifest-rs** — manifests define the capability graphs that become Laplacians
+- **agent-handshake-rs** — traditional handshake can upgrade to spectral communication
+
+## Testing
+
+Integration tests via `demo.py` — 4 agents exchange spectral messages and assert successful communication, conservation ratios, and eigenvalue alignment.
+
+## Installation
+
+```bash
+pip install numpy
+```
+
+Python 3 with NumPy. No other dependencies.
