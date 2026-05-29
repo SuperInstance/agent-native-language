@@ -50,3 +50,5 @@ Agents register with capability graphs. Tasks are projected onto eigenvectors. R
 ## License
 
 MIT
+
+Part of the [SuperInstance OpenConstruct](https://github.com/SuperInstance/OpenConstruct) ecosystem.
